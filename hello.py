@@ -21,10 +21,10 @@ def upload_contacts():
 
 @app.route('/messages', methods = ['POST'])
 def post():
-    user_id = request.json["user_id"]
-    user_phone_number = request.json["phone_number"]
-    contact_list = request.json["contact_list"]
-    message_list = request.json["message_list"]
+    user_id = request.json["userId"]
+    user_phone_number = request.json["phoneNumber"]
+    contact_list = request.json["contactList"]
+    message_list = request.json["messageList"]
     upload_contacts(user_id, contact_list)
     upload_messages(user_id, message_list)
     process(contact_list, message_list)
