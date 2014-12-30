@@ -1,6 +1,7 @@
 import os
 import models
 import database
+import sys
 from flask import Flask, request, json
 from flask.ext.sqlalchemy import SQLAlchemy
 
@@ -20,6 +21,8 @@ def post():
     messageList = request.json["messageList"]
     #upload_contacts(userId, contactList)
     database.upload_messages(db, userId, messageList)
+    print "SUCCESS"
+    sys.stdout.flush()
     #process(contactList, messageList)
     # send results back
 
