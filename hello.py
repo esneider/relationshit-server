@@ -19,7 +19,7 @@ def post():
     # contactList = request.json["contactList"]
     messageList = request.json["messageList"]
     #upload_contacts(userId, contactList)
-    #database.upload_messages(db, userId, messageList)
+    database.upload_messages(db, userId, messageList)
     #process(contactList, messageList)
     # send results back
 
