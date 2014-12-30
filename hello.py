@@ -17,7 +17,7 @@ def second_hello():
 def third_hello():
     return 'omgggg will you be my friend?'
 
-def upload_contacts():
+#def upload_contacts():
 
 @app.route('/messages', methods = ['POST'])
 def post():
@@ -25,9 +25,9 @@ def post():
     user_phone_number = request.json["phoneNumber"]
     contact_list = request.json["contactList"]
     message_list = request.json["messageList"]
-    upload_contacts(user_id, contact_list)
-    upload_messages(user_id, message_list)
-    process(contact_list, message_list)
+    #upload_contacts(user_id, contact_list)
+    #upload_messages(user_id, message_list)
+    #process(contact_list, message_list)
     # send results back
 
 @app.route('/hello')
