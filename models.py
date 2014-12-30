@@ -5,7 +5,7 @@ db = SQLAlchemy()
 class Message(db.Model):
     __tablename__ = 'Messages'
     __tableargs__ = (
-        PrimaryKeyConstraint('userId', 'direction', 'phoneNumber', 'timestamp', 'messageLength'),
+        db.PrimaryKeyConstraint('userId', 'direction', 'phoneNumber', 'timestamp', 'messageLength'),
         )
 
     userId = db.Column(db.Integer, nullable = False)     # add foreign key
@@ -24,7 +24,7 @@ class Message(db.Model):
 class Contacts(db.Model):
     __tablename__ = 'Contacts'
     __tableargs__ = (
-        PrimaryKeyConstraint('userId', 'phoneNumber'),
+        db.PrimaryKeyConstraint('userId', 'phoneNumber'),
         )
 
     userId = db.Column(db.Integer, nullable = False)
