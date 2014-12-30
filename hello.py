@@ -7,27 +7,19 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 db = SQLAlchemy(app)
 
-
 @app.route('/')
 def hello():
     return 'Hello World!'
 
-@app.route('/rebecca')
-def second_hello():
-    return 'HI!'
-@app.route('/miriam')
-def third_hello():
-    return 'omgggg will you be my friend?'
-
 @app.route('/messages', methods = ['POST'])
 def post():
-    user_id = request.json["userId"]
-    user_phone_number = request.json["phoneNumber"]
-    contact_list = request.json["contactList"]
-    message_list = request.json["messageList"]
-    #upload_contacts(user_id, contact_list)
-    upload_messages(db, user_id, message_list)
-    #process(contact_list, message_list)
+    userId = request.json["userId"]
+    # phoneNumber = request.json["phoneNumber"]
+    # contactList = request.json["contactList"]
+    messageList = request.json["messageList"]
+    #upload_contacts(userId, contactList)
+    upload_messages(db, userId, messageList)
+    #process(contactList, messageList)
     # send results back
 
 @app.route('/hello')
