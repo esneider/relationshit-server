@@ -6,7 +6,7 @@ class Message(db.Model):
     __tablename__ = 'Messages'
 
     messageId = db.Column(db.Integer, nullable = False, primary_key = True)
-    userId = db.Column(db.Integer, nullable = False)  # add foreign key
+    userId = db.Column(db.Integer, nullable = False)     # add foreign key
     direction = db.Column(db.String(80), nullable = False)     # either 'send' or 'receive'
     phoneNumber = db.Column(db.String(120), nullable = False)
     timestamp = db.Column(db.Integer, nullable = False)
