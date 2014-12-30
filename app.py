@@ -22,13 +22,11 @@ def fake_message():
     return messageList
 
 
-@app.route('/messages', methods = ['POST'])
-def post():
+@app.route('/messageList', methods = ['POST'])
+def messageList():
     userId = request.json["userId"]
     # phoneNumber = request.json["phoneNumber"]
-    # contactList = request.json["contactList"]
     messageList = request.json["messageList"]
-    # upload_contacts(userId, contactList)
     database.upload_messages(userId, messageList)
     # process(contactList, messageList)
     # send results back
