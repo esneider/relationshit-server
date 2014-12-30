@@ -8,5 +8,5 @@ def hello():
     return 'Hello World!'
 
 @app.route('/rebecca')
-def hello():
+def second_hello():
     return 'HI!'
