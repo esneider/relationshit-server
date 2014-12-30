@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request
+from flask import Flask, request, json
 
 app = Flask(__name__)
 
@@ -15,13 +15,9 @@ def third_hello():
     return 'omgggg will you be my friend?'
 
 
-@app.route('/post')
+@app.route('/post', methods = ['POST'])
 def post():
-    # Get the parsed contents of the form data
-    json = request.json
-    print(json)
-    # Render template
-    return json
+    return "JSON Message: " + json.dumps(request.json)
 
 @app.route('/hello')
 def api_hello():
