@@ -16,7 +16,8 @@ def hello():
 @app.route('/fakemessage', methods = ['POST'])
 def fake_message():
     userId = request.json["userId"]
-    return userId
+    messageList = request.json["messageList"]
+    return str(userId)
 
 
 @app.route('/messages', methods = ['POST'])
