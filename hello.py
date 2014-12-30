@@ -9,7 +9,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 db = SQLAlchemy(app)
 
 @app.route('/')
-def app():
+def hello():
     return 'Hello World!'
 
 @app.route('/messages', methods = ['POST'])
