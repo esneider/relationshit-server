@@ -3,7 +3,7 @@ from hello import db
 class Message(db.Model):
     __tablename__ = 'Messages'
 
-    userId = db.Column(db.Integer, nullable = False, db.ForeignKey('Contacts.userId'))  # add foreign key
+    userId = db.Column(db.Integer, db.ForeignKey('Contacts.userId'), nullable = False)  # add foreign key
     direction = db.Column(db.String(80), nullable = False)     # either 'send' or 'receive'
     phoneNumber = db.Column(db.String(120), nullable = False)
     timestamp = db.Column(db.TIMESTAMP, nullable = False)
@@ -23,7 +23,7 @@ class Contacts(db.Model):
     phoneNumber = db.Column(db.String(120), nullable = False)
     contactType = db.Column(db.String(120), nullable = False)     # default is "regular"
 
-    def __init__(self, userId, poneNumber, contactType):
+    def __init__(self, userId, phoneNumber, contactType):
         self.userId = userId
         self.phoneNumber = phoneNumber
         self.contactType = contactType
