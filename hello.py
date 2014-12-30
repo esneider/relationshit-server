@@ -11,5 +11,5 @@ def hello():
 def second_hello():
     return 'HI!'
 @app.route('/miriam')
-def second_hello():
-    return 'hello will you be my friend?'
+def third_hello():
+    return 'omgggg will you be my friend?'
