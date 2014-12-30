@@ -1,4 +1,5 @@
 import os
+from flask.ext.sqlalchemy import SQLAlchemy
 from flask import Flask, request, json
 
 app = Flask(__name__)
