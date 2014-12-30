@@ -13,10 +13,11 @@ db = SQLAlchemy(app)
 def hello():
     return 'Hello World!'
 
-@app.route('/fakemessage')
+@app.route('/fakemessage', methods = ['POST'])
 def fake_message():
-    messageList = [{"direction":"send","timestamp":200859, "messageLength":44}]
-    database.upload_messages(db, 1123, messageList)
+    userId = request.json["userId"]
+    messageList = request.json["messageList"]
+    return repr(messageList)
 
 @app.route('/messages', methods = ['POST'])
 def post():
