@@ -17,7 +17,7 @@ def third_hello():
 
 @app.route('/post', methods = ['POST'])
 def post():
-    return "JSON Message: " + json.dumps(request.json)
+    return "JSON Message: " + json.dumps(request.json["message"])
 
 @app.route('/hello')
 def api_hello():
