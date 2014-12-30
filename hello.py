@@ -10,3 +10,6 @@ def hello():
 @app.route('/rebecca')
 def second_hello():
     return 'HI!'
+@app.route('/miriam')
+def second_hello():
+    return 'hello will you be my friend?'
