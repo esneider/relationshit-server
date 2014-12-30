@@ -1,7 +1,7 @@
 import os
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask import Flask, request, json
-from populate_databse import *
+from populate_database import *
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
