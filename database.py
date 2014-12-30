@@ -1,5 +1,7 @@
 import models
 
+NUM_TOP_FRIENDS = 10
+
 def upload_messages(db, userId, messageList):
     for message in messageList:
         direction = message["direction"]
@@ -9,8 +11,6 @@ def upload_messages(db, userId, messageList):
 
         message_obj = models.Message(1, userId, direction, phoneNumber, timestamp, messageLength)
         db.session.add(message_obj) #add message to database
-<<<<<<< HEAD
-=======
     db.session.commit()
 
 def upload_contacts(db, userId, contactList):
@@ -23,6 +23,10 @@ def upload_contacts(db, userId, contactList):
         db.session.add(contact_obj)
     db.session.commit()
 
-def process():
-        pass
->>>>>>> 9fc04462d9b55ed75ef6dbd4bd7c69461d11d677
+def process(db, userId):
+    create_graphs(db, userId)
+    pass
+
+def create_graphs(db, userId):
+    pass
+
