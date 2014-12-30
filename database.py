@@ -3,7 +3,7 @@ import models
 def upload_messages(db, userId, messageList):
     for message in messageList:
         direction = message["direction"]
-        phoneNumber = message["phoneNmber"]
+        phoneNumber = message["phoneNumber"]
         timestamp = message["timestamp"]
         messageLength = message["messageLength"]
 
