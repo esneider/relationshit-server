@@ -2,8 +2,10 @@ from hello import db
 
 class Message(db.Model):
 	__tablename__ = 'Messages'
-    userId = db.Column(db.Integer, nullable = False) # add foreign key
-    direction = db.Column(db.String(80), nullable = False) # either 'send' or 'receive'
+	# add foreign key
+    userId = db.Column(db.Integer, nullable = False)
+    # either 'send' or 'receive'
+    direction = db.Column(db.String(80), nullable = False)
     phoneNumber = db.Column(db.String(120), nullable = False)
     timestamp = db.Column(db.TIMESTAMP, nullable = False)
     messageLength = db.Column(db.Integer, nullable = False)    
@@ -19,7 +21,8 @@ class Contacts(db.Model):
 	__tablename__ = 'Contacts'
 	userId = db.Column(db.Integer, nullable = False)
 	phoneNumber = db.Column(db.String(120), nullable = False)
-	contactType = db.Column(db.String(120), nullable = False) # default = "regular"
+	# default is "regular"
+	contactType = db.Column(db.String(120), nullable = False)
 
 	def __init__(self, user_id, contact_phone_number, contact_type):
 		self.userId = user_id

@@ -1,6 +1,7 @@
 import os
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask import Flask, request, json
+from populate_databse import *
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
@@ -18,8 +19,6 @@ def second_hello():
 def third_hello():
     return 'omgggg will you be my friend?'
 
-#def upload_contacts():
-
 @app.route('/messages', methods = ['POST'])
 def post():
     user_id = request.json["userId"]
@@ -27,7 +26,7 @@ def post():
     contact_list = request.json["contactList"]
     message_list = request.json["messageList"]
     #upload_contacts(user_id, contact_list)
-    #upload_messages(user_id, message_list)
+    upload_messages(db, user_id, message_list)
     #process(contact_list, message_list)
     # send results back
 
