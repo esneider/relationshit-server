@@ -22,3 +22,10 @@ def post():
     print(json)
     # Render template
     return json
+
+@app.route('/hello')
+def api_hello():
+    if 'name' in request.args:
+        return 'Hello ' + request.args['name']
+    else:
+        return 'Hello John Doe'
