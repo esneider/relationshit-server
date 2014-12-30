@@ -1,8 +1,8 @@
-from app import db
+from hello import db
 
 class Message(db.Model):
 	__tablename__ = 'Messages'
-    user_id = db.Column(db.Integer, primary_key = True)
+    user_id = db.Column(db.Integer) # add foreign key
     direction = db.Column(db.String(80), nullable = False) # either 'send' or 'receive'
     phone_number = db.Column(db.String(120), nullable = False)
     timestamp = db.Column(db.DateTime, nullable = False, timezone = True) # make it timezone aware?
@@ -20,7 +20,7 @@ class Message(db.Model):
 
 class Contacts(db.Model):
 	__tablename__ = 'Contacts'
-	user_id = db.Column(db.Integer, primary_key = True)
+	user_id = db.Column(db.Integer)
 	contact_name = db.Column(db.String(120), nullable = False)
 	contact_phone_number = db.Column(db.String(120), nullable = False)
 
