@@ -1,4 +1,4 @@
-from models import *
+import models
 
 def upload_messages(db, userId, messageList):
     for message in messageList:
@@ -7,5 +7,5 @@ def upload_messages(db, userId, messageList):
         timestamp = message["timestamp"]
         messageLength = message["messageLength"]
 
-        message_obj = Message(userId, direction, phoneNumber, timestamp, messageLength)
+        message_obj = models.Message(1, userId, direction, phoneNumber, timestamp, messageLength)
         db.session.add(message_obj) #add message to database
