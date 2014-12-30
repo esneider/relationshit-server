@@ -24,12 +24,15 @@ def fake_message():
 
 @app.route('/messageList', methods = ['POST'])
 def messageList():
-    userId = request.json["userId"]
-    # phoneNumber = request.json["phoneNumber"]
-    messageList = request.json["messageList"]
+
+    print request.headers
+    sys.stdout.flush()
+
+    json = request.get_json(force=True)
+    userId = json["userId"]
+    messageList = json["messageList"]
+
     database.upload_messages(userId, messageList)
-    # process(contactList, messageList)
-    # send results back
     return 'SUCCESS'
 
 
@@ -39,3 +42,6 @@ def api_hello():
         return 'Hello ' + request.args['name']
     else:
         return 'Hello John Doe'
+
+if __name__ == "__main__":
+    app.run()
