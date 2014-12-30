@@ -25,10 +25,6 @@ def fake_message():
 @app.route('/messageList', methods = ['POST'])
 def messageList():
 
-    print 'heyy'
-    sys.stdout.flush()
-    return 'sad'
-
     print request.headers
     sys.stdout.flush()
 

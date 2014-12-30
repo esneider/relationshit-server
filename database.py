@@ -6,7 +6,6 @@ from app import db
 def upload_messages(userId, messageList):
 
     for message in messageList:
-        print message
         direction     = message["direction"]
         phoneNumber   = message["phoneNumber"]
         timestamp     = message["timestamp"]
@@ -15,7 +14,6 @@ def upload_messages(userId, messageList):
         message_obj = models.Message(userId, direction, phoneNumber, timestamp, messageLength)
         db.session.add(message_obj)
 
-    sys.stdout.flush()
     db.session.commit()
 
 
