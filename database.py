@@ -82,31 +82,30 @@ def contact_query(user_id, phoneNumber):
 
 '''The sender was actually waiting for an answer between msg1 and msg2
 Both messages were sent by the (same) user'''
-# def was_waiting_for_answer(msg1, msg2):
-#     delay = msg2.timestamp - msg1.timestamp
-#     if (msg1.direction != msg2.direction): return False
-#     acceptable = 60 + len(msg2)/2
-#     return delay > acceptable
+def was_waiting_for_answer(msg1, msg2):
+    delay = msg2.timestamp - msg1.timestamp
+    if (msg1.direction != msg2.direction): return False
+    acceptable = 60 + len(msg2)/2
+    return delay > acceptable
 
 '''How many times do you have to text him till he replies? (worst case)'''
-# def max_unreplied_messages(db, user_id, phoneNumber):
-#     q = models.Message.query.filter_by(userId = user_id, phoneNumber = phoneNumber)
-#     all_messages = q.order_by(models.Message.timestamp).all()
-#     maxcount = 0
-#     currentcount = 0
-#     first = True
-#     for msg in all_messages:
-#         if (first):
-#             first = False
-#         else:
-#             if (msg.direction == "send" && was_waiting_for_answer(last, msg)):
-#                 currentcount += 1
-#             else:
-#                 maxcount = max(currentcount, maxcount)
-#                 currentcount = 0
-#         last = msg
-#     return maxcount
-#
+def max_unreplied_messages(db, user_id, phoneNumber):
+    q = models.Message.query.filter_by(userId = user_id, phoneNumber = phoneNumber)
+    all_messages = q.order_by(models.Message.timestamp).all()
+    maxcount = 0
+    currentcount = 0
+    first = True
+    for msg in all_messages:
+        if (first):
+            first = False
+        else:
+            if (msg.direction == "send" and was_waiting_for_answer(last, msg)):
+                currentcount += 1
+            else:
+                maxcount = max(currentcount, maxcount)
+                currentcount = 0
+        last = msg
+    return maxcount
 
 def populate_contacts(user_id):
     contacts = {}
