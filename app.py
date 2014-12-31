@@ -40,8 +40,8 @@ def messageList():
 def api_hello():
     print "before calling process"
     #database.test_query(db)
-    database.contact_query(db, "352584060592000", "32507")
-
+    #database.contact_query(db, "352584060592000", "32507")
+    database.populate_contacts(db, "352584060592000")
     print "after executing process"
     sys.stdout.flush()
 
