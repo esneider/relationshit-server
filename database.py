@@ -90,23 +90,31 @@ def test_query(db):
     try_this = models.Message.query.filter_by(userId="352584060592000")
     print "after first query"
     #print "hi" + str(try_this.column_descriptions)
+    
     #print try_this.all()[0].messageLength #this works
     # print try_this.count() #this also works
-    #print try_this.all().messageLength
     results_list=try_this.all()
-    print [r.messageLength for r in results_list]
+    print [r.messageLength for r in results_list] #this works
+
+'''
+def order_by_number_messages(db,user_id, direction):
+    q = models.Message.query.filter_by(userId=user_id,direction=direction)
     
-def ordered_query(db,user_id, orderColumn):
-    #orderColumn is the column you want to sort
-    q = models.Message.query.filter_by(userId=user_id).order_by(orderColumn)
     results_list=q.all()
+    ordered_numbers = [r.phoneNumber for r in results_list] 
+    ordered_values = [r.orderColumn for r in results_list]
     
-    print "after first query"
-    #print "hi" + str(try_this.column_descriptions)
-    #print try_this.all()[0].messageLength #this works
-    print try_this.count() #this also works
-    
-    
+    #return [ordered_numbers, ordered_values]
+'''
+def contact_query(db, user_id, phoneNumber):
+    q = models.Message.query.filter_by(userId=user_id, phoneNumber=phoneNumber)
+    numSentTexts = q.filter_by(direction="sent").count()
+    numRecTexts = q.filter_by(direction="receive").count()
+    return numSentTexts, numRecTexts
+
+
+
+'''    
 # contacts: {phoneNumber: {sentTexts: #, receivedTexts: #, etc.})}
 def populate_contacts(db, user_id):
     contacts = {}
@@ -150,3 +158,4 @@ def contacts_to_json(contacts):
         else:
             c["receivedTexts"] = contacts[number]["receivedTexts"]
         result.append(c)
+'''
