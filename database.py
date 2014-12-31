@@ -96,10 +96,11 @@ def test_query(db):
     results_list=try_this.all()
     print [m for m in results_list.messageLength]
     
-def ordered_query(db,user_id="352584060592000", orderColumn):
+def ordered_query(db,user_id, orderColumn):
     #orderColumn is the column you want to sort
-    print "before first query"
     q = models.Message.query.filter_by(userId=user_id).order_by(orderColumn)
+    results_list=q.all()
+    
     print "after first query"
     #print "hi" + str(try_this.column_descriptions)
     #print try_this.all()[0].messageLength #this works
