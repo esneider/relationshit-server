@@ -36,6 +36,7 @@ def process(db, userId):
     contacts = contacts_to_json(populate_contacts(db, userId))
 
     contacts = json.dumps(contacts)
+    print contacts
     return contacts
 
 '''
