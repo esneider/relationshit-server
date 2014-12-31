@@ -110,11 +110,12 @@ def contact_query(db, user_id, phoneNumber):
     q = models.Message.query.filter_by(userId=user_id, phoneNumber=phoneNumber)
     numSentTexts = q.filter_by(direction="sent").count()
     numRecTexts = q.filter_by(direction="receive").count()
+    print  numSentTexts, numRecTexts
     return numSentTexts, numRecTexts
 
 
 
-'''    
+ 
 # contacts: {phoneNumber: {sentTexts: #, receivedTexts: #, etc.})}
 def populate_contacts(db, user_id):
     contacts = {}
@@ -158,4 +159,4 @@ def contacts_to_json(contacts):
         else:
             c["receivedTexts"] = contacts[number]["receivedTexts"]
         result.append(c)
-'''
+
