@@ -33,15 +33,18 @@ def upload_contacts(userId, contactList):
 
 
 def process(db, userId):
-    contacts = contacts_to_json(populate_contacts(db, userId))
-
-    contacts = json.dumps(contacts)
+    contacts = populate_contacts(db, userId)
     print contacts
+
+    # top friends graphs
+    top_friends(contacts, "sentTexts")
+
+    #contacts = json.dumps(contacts)
+    #print contacts
     return contacts
 
 '''
 def populate_graphs(db, userId, graphs):
-    friend_score =
     top_ten_recipients = db.session.query(db.func.distinct(models.Message.phoneNumber).filter(models.Message.direction == 'send'),
                          db.func.count(models.Message.phoneNumber)).filter(models.Message.direction == 'send').label("count")).group_by(models.Message.phoneNumber).order_by(count).limit(10)
     top_ten_senders = db.session.query(db.func.distinct(models.Message.phoneNumber).filter(models.Message.direction == 'receive'),
@@ -58,6 +61,14 @@ def populate_graphs(db, userId, graphs):
     graphs.append(graph2)
     pass
 '''
+
+def top_friends(contacts, sortKey):
+    value_tuples = []
+    for key, value in contacts.iteritems():
+        value_tuples += [ (key, value[sortKey])]
+    result = sorted(value_tuples, key = lambda x: x[1])
+    print result
+    return result
 
 def past_fifteen_days(db, user_id, phone_number):
     sent_texts = []
@@ -105,7 +116,7 @@ def populate_contacts(db, user_id):
     uniqueNumbers = [m.phoneNumber for m in q]
     for uniqueNumber in uniqueNumbers:
          numSentTexts, numRecTexts = contact_query(db, user_id, uniqueNumber)
-         contacts[uniqueNumber] = {"sentTexts":numSentTexts, "numRecTexts":numRecTexts}
+         contacts[uniqueNumber] = {"sentTexts":numSentTexts, "receivedTexts":numRecTexts}
     return contacts
 
 def contacts_to_json(contacts):
