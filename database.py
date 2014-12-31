@@ -107,6 +107,7 @@ def order_by_number_messages(db,user_id, direction):
     #return [ordered_numbers, ordered_values]
 '''
 def contact_query(db, user_id, phoneNumber):
+    '''Returns properties specific to a single contact'''
     q = models.Message.query.filter_by(userId=user_id, phoneNumber=phoneNumber)
     numSentTexts = q.filter_by(direction="sent").count()
     numRecTexts = q.filter_by(direction="receive").count()
@@ -115,7 +116,7 @@ def contact_query(db, user_id, phoneNumber):
 def populate_contacts(db, user_id):
     print "in populate_contacts"
     contacts = {} #empty dict that we will populate
-    q = models.Message.query.filter_by(userId=user_id, phoneNumber=phoneNumber)
+    q = models.Message.query.filter_by(userId=user_id, phoneNumber="32507")
     print "dummy"
     q = models.Message.query(models.Message.phoneNumber)#.filter_by(userId=user_id).distinct() #this line is not working
     uniqueNumbers = [m.phoneNumber for m in q]
