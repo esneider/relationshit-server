@@ -55,6 +55,7 @@ def compound_friend_score(contacts):
     sorted_scores = sorted(x.items(), key = operator.itemgetter(1), reverse = True)    
     max = sorted_scores[0][1]
     normalized_scores = [(score[0], int((score[1]/max)*100)) for score in sorted_scores]
+    
 
 def top_friends(contacts, sortKey, desc):
     value_tuples = []
@@ -98,13 +99,12 @@ def user_data(db, user_id):
         result[tup[0]] = {}
 
     for tup in all_users:
-        if (tup[2] = 'send'):
+        if (tup[2] == 'send'):
             result[tup[0]]["sentTexts"] = tup[3]
             result[tup[0]]["sentMsgLen"] = tup[4]
         else:
             result[tup[0]]["receivedTexts"] = tup[3]
             result[tup[0]]["receivedMsgLen"] = tup[4]
-    # add graph stuff
 
 
 '''def past_fifteen_days(db, user_id, phone_number):
