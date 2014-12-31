@@ -44,11 +44,11 @@ def process(userId):
     result = []
 
     # top friends graphs
-    result.append( ( "Most texts sent to", top_friends(contacts, "sentTexts", True) ) )
-    result.append( ( "Most texts received from", top_friends(contacts, "receivedTexts", True) ) )
-    result.append( ( "Longest messages sent to", top_friends(contacts, "sentMsgLength", True) ) )
-    result.append( ( "Longest messages received from", top_friends(contacts, "receivedMsgLength", True)))
     result.append( ( "Top friends", compound_friend_score(contacts) ) )
+    result.append( ( "Top sent", top_friends(contacts, "sentTexts", True) ) )
+    result.append( ( "Top received", top_friends(contacts, "receivedTexts", True) ) )
+    result.append( ( "Longest sent", top_friends(contacts, "sentMsgLength", True) ) )
+    result.append( ( "Longest received", top_friends(contacts, "receivedMsgLength", True)))
 
     return result
 
@@ -149,7 +149,7 @@ def user_data(userId):
     result = []
 
     for phone, data in contacts.iteritems():
-        contact = [("phoneNumber", phone), ("sentTexts", data["sentTexts"]), ("receivedTexts", data["receivedTexts"]), ("sentMsgLength", data["sentMsgLength"]), ("receivedMsgLength", data["receivedMsgLength"])]
+        contact [phone, data["sentTexts"], data["receivedTexts"], data["sentMsgLength"], data["receivedMsgLength"]]
         result.append(contact)
 
     return result

@@ -63,6 +63,26 @@ def topLists():
     return resp
 
 
+@app.route('/contactsData', methods = ['GET'])
+def topLists():
+
+    print '[start] GET contactsData'
+    sys.stdout.flush()
+    print request.headers
+    sys.stdout.flush()
+
+    userId = request.args.get('IMEI')
+    blabla = database.user_data(userId)
+
+    data = json.dumps(blabla)
+    resp = Response(response=data, mimetype="application/json")
+
+    print '[end] GET contactsData'
+    sys.stdout.flush()
+
+    return resp
+
+
 @app.route('/test')
 def api_hello():
     print "before calling process"
