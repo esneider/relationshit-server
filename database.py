@@ -66,7 +66,7 @@ def top_friends(contacts, sortKey):
     value_tuples = []
     for key, value in contacts.iteritems():
         value_tuples += [ (key, value[sortKey])]
-    result = sorted(value_tuples, key = lambda x: x[1])
+    result = sorted(value_tuples, key = lambda x: x[1], reverse=True)
     print result
     return result
 
@@ -134,7 +134,7 @@ def contacts_to_json(contacts):
         else:
             c["receivedTexts"] = contacts[number]["receivedTexts"]
         result.append(c)
-    print result
+    return result
 
 '''
 # contacts: {phoneNumber: {sentTexts: #, receivedTexts: #, etc.})}
