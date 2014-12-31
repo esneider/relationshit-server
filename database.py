@@ -43,7 +43,8 @@ def process(userId):
     # top friends graphs
     result.append( ( "Most texts sent to", top_friends(contacts, "sentTexts", True) ) )
     result.append( ( "Most texts received from", top_friends(contacts, "receivedTexts", True) ) )
-    result.append( ( "Longest messages", top_friends(contacts, "messageLength", True) ) )
+    result.append( ( "Longest messages sent to", top_friends(contacts, "sentMsgLength", True) ) )
+    result.append( ( "Longest messages received from", top_friends(contacts, "receivedMsgLength", True)))
     result.append( ( "Top friends", compound_friend_score(contacts) ) )
 
     return result
@@ -69,16 +70,24 @@ def top_friends(contacts, sortKey, desc):
     result = [(result[0], int((float(score[1])/maxval)*100)) for res in result]
     return result
 
-
 '''Returns properties specific to a single contact'''
 def contact_query(user_id, phoneNumber):
-
+    sentMsgs = []
+    rcvdMsgs = []
+    
     q = models.Message.query.filter_by(userId = user_id, phoneNumber = phoneNumber)
     numSentTexts = q.filter_by(direction = "send").count()
     numRecTexts = q.filter_by(direction = "receive").count()
-    msgs = [x.messageLength for x in q.all()]
-    msgLen = sum(msgs) / len(msgs)
-    return numSentTexts, numRecTexts, msgLen
+
+    for x in q.all():
+        if (x.direction == 'send'):
+            sentMsgs.append(x)
+        else:
+            rcvdMsgs.append(x)
+
+    sentMsgLen = sum(sentMsgs) / len(sentMsgs)
+    rcvdMsgLen = sum(rcvdMsgs) / len(rcvdMsgs)
+    return numSentTexts, numRecTexts, sentMsgLen, rcvdMsgLen
 
 '''The sender was actually waiting for an answer between msg1 and msg2
 Both messages were sent by the (same) user'''
@@ -112,8 +121,8 @@ def populate_contacts(user_id):
     q = db.session.query(models.Message.phoneNumber).filter_by(userId = user_id).distinct()
     uniqueNumbers = [m.phoneNumber for m in q]
     for uniqueNumber in uniqueNumbers:
-        numSentTexts, numRecTexts, msgLen = contact_query(user_id, uniqueNumber)
-        contacts[uniqueNumber] = {"sentTexts":numSentTexts, "receivedTexts":numRecTexts, "messageLength":msgLen}
+        numSentTexts, numRecTexts, sentMsgLength, receivedMsgLength = contact_query(user_id, uniqueNumber)
+        contacts[uniqueNumber] = {"sentTexts":numSentTexts, "receivedTexts":numRecTexts, "sentMsgLength":sentMsgLength, "receivedMsgLength":receivedMsgLength}
     return contacts
 
 
@@ -124,19 +133,14 @@ def graph_stats(user_id, phone_number):
     return sent_times, rcvd_times
 
 
-def user_data(user_id):
-    result = {}
-    all_users = db.session.query(models.Message.userId, models.Message.phoneNumber, models.Message.direction, func.count(timestamp), func.avg(messageLength)).filter_by(userId = user_id).group_by(userId, phoneNumber, direction).all()
-    for tup in all_users:
-        result[tup[0]] = {}
+def user_data(contacts):
+    result = []
 
-    for tup in all_users:
-        if (tup[2] == 'send'):
-            result[tup[0]]["sentTexts"] = tup[3]
-            result[tup[0]]["sentMsgLen"] = tup[4]
-        else:
-            result[tup[0]]["receivedTexts"] = tup[3]
-            result[tup[0]]["receivedMsgLen"] = tup[4]
+    for phone, data in contacts.iteritems():
+        contact = [("phoneNumber", phone), ("sentTexts", data["sentTexts"]), ("receivedTexts", data["receivedTexts"]), ("sentMsgLength", data["sentMsgLength"]), ("receivedMsgLength", data["receivedMsgLength"])]
+        result.append(contact)
+
+    return result
 
 
 '''def past_fifteen_days(user_id, phone_number):
