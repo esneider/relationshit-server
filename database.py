@@ -75,6 +75,11 @@ def past_fifteen_days(db, user_id, phone_number):
     for stamp in all_rcvd_messages:
         rcvd_texts[((int(stamp) - current_time))/seconds_per_day] += 1
         
+def test_query(db):
+    print "before first query"
+    try_this = db.session.query(models.Message).filter_by(userId=user_id)
+    print try_this
+
 # contacts: {phoneNumber: {sentTexts: #, receivedTexts: #, etc.})}
 def populate_contacts(db, user_id):
     contacts = {}
