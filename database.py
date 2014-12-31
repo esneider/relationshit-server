@@ -50,12 +50,15 @@ def process(db, userId):
 
 def compound_friend_score(contacts):
     scores = {}
-    for key, value in contacts.iteritems():
-        scores[key] = sum(scores[key].values())
 
-    sorted_scores = sorted(x.items(), key = operator.itemgetter(1), reverse = True)    
-    max = sorted_scores[0][1]
-    normalized_scores = [(score[0], int((score[1]/max)*100)) for score in sorted_scores]
+    for key, value in contacts.iteritems():
+        print key, value
+        scores[key] = sum(contacts[key].values())
+
+    sorted_scores = sorted(scores.items(), key = operator.itemgetter(1), reverse = True) 
+    max = float(sorted_scores[0][1])
+    normalized_scores = [(score[0], int((float(score[1])/max)*100)) for score in sorted_scores]
+    return normalized_scores;
 
 
 def top_friends(contacts, sortKey, desc):
