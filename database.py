@@ -90,7 +90,7 @@ def test_query(db):
     #filter_by(userId="352584060592000")
     print "after first query"
     print "hi" + str(try_this.column_descriptions)
-    print try_this.all()[0]["messageLength"]
+    print try_this.all()[0].messageLength
 
 # contacts: {phoneNumber: {sentTexts: #, receivedTexts: #, etc.})}
 def populate_contacts(db, user_id):
