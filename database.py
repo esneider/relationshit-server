@@ -65,12 +65,13 @@ def compound_friend_score(contacts):
 
 
 def top_friends(contacts, sortKey, desc):
+
     value_tuples = []
     for key, value in contacts.iteritems():
         value_tuples += [ (key, value[sortKey]) ]
     result = sorted(value_tuples, key = lambda x: x[1], reverse = desc)[:NUM_FRIENDS]
     maxval = float(result[0][1])
-    result = [(result[0], int((float(score[1])/maxval)*100)) for res in result]
+    result = [(res[0], int((float(res[1])/maxval)*100)) for res in result]
     return result
 
 '''Returns properties specific to a single contact'''
@@ -149,7 +150,7 @@ def user_data(userId):
     result = []
 
     for phone, data in contacts.iteritems():
-        contact [phone, data["sentTexts"], data["receivedTexts"], data["sentMsgLength"], data["receivedMsgLength"]]
+        contact = [phone, data["sentTexts"], data["receivedTexts"], data["sentMsgLength"], data["receivedMsgLength"]]
         result.append(contact)
 
     return result
