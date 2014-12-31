@@ -86,8 +86,10 @@ def past_fifteen_days(db, user_id, phone_number):
 
 def test_query(db):
     print "before first query"
-    try_this = db.session.query(models.Message).filter_by(phoneNumber="7626")
-    print try_this
+    try_this = models.Message.query.filter_by(phoneNumber='32507')
+    #filter_by(userId="352584060592000")
+    print "after first query"
+    print "hi" + str(try_this.column_descriptions)
 
 
 # contacts: {phoneNumber: {sentTexts: #, receivedTexts: #, etc.})}
@@ -96,7 +98,7 @@ def populate_contacts(db, user_id):
 
     print "before first query"
     try_this = db.session.query(models.Message).filter_by(userId=user_id)
-    print try_this
+    print "hi" + str(try_this)
     #all_sent_contacts = db.session.query(models.Message.phoneNumber, db.func.count(models.Message.phoneNumber).label("sent_count")).filter_by(userId=user_id).filter_by(direction='send').group_by(phoneNumber).order_by(db.desc("sent_count"))
     print "after first query"
     '''all_sent_contacts = all_sent_contacts.column_descriptions
