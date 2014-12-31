@@ -86,12 +86,48 @@ def past_fifteen_days(db, user_id, phone_number):
 
 def test_query(db):
     print "before first query"
-    try_this = models.Message.query.filter_by(phoneNumber='32507')
-    #filter_by(userId="352584060592000")
+    #try_this = models.Message.query.filter_by(phoneNumber='32507')
+    try_this = models.Message.query.filter_by(userId="352584060592000")
     print "after first query"
-    print "hi" + str(try_this.column_descriptions)
+    #print "hi" + str(try_this.column_descriptions)
+    
+    #print try_this.all()[0].messageLength #this works
+    # print try_this.count() #this also works
+    results_list=try_this.all()
+    print [r.messageLength for r in results_list] #this works
+
+'''
+def order_by_number_messages(db,user_id, direction):
+    q = models.Message.query.filter_by(userId=user_id,direction=direction)
+    
+    results_list=q.all()
+    ordered_numbers = [r.phoneNumber for r in results_list] 
+    ordered_values = [r.orderColumn for r in results_list]
+    
+    #return [ordered_numbers, ordered_values]
+'''
+def contact_query(db, user_id, phoneNumber):
+    '''Returns properties specific to a single contact'''
+    q = models.Message.query.filter_by(userId=user_id, phoneNumber=phoneNumber)
+    numSentTexts = q.filter_by(direction="sent").count()
+    numRecTexts = q.filter_by(direction="receive").count()
+    return numSentTexts, numRecTexts
+
+def populate_contacts(db, user_id):
+    print "in populate_contacts"
+    contacts = {} #empty dict that we will populate
+    q = models.Message.query.filter_by(userId=user_id, phoneNumber="32507")
+    print "dummy"
+    q = models.Message.query(models.Message.phoneNumber)#.filter_by(userId=user_id).distinct() #this line is not working
+    uniqueNumbers = [m.phoneNumber for m in q]
+    print uniqueNumbers
+    for uniqueNumber in uniqueNumbers:
+         numSentTexts, numRecTexts =  contact_query(db, user_id, uniqueNumber)
+         contacts[uniqueNumber]={"sentTexts":numSentTexts, "numRecTexts":numRecTexts}
+        
 
 
+'''
 # contacts: {phoneNumber: {sentTexts: #, receivedTexts: #, etc.})}
 def populate_contacts(db, user_id):
     contacts = {}
@@ -101,7 +137,8 @@ def populate_contacts(db, user_id):
     print "hi" + str(try_this)
     #all_sent_contacts = db.session.query(models.Message.phoneNumber, db.func.count(models.Message.phoneNumber).label("sent_count")).filter_by(userId=user_id).filter_by(direction='send').group_by(phoneNumber).order_by(db.desc("sent_count"))
     print "after first query"
-    '''all_sent_contacts = all_sent_contacts.column_descriptions
+    
+    all_sent_contacts = all_sent_contacts.column_descriptions
     print all_sent_contacts
 
     for entry in all_sent_contacts:
@@ -117,10 +154,12 @@ def populate_contacts(db, user_id):
             contacts[entry.phoneNumber] = {}
         contacts[phoneNumber]["receivedTexts"] = entry.rcvd_count
 
-    return contacts    '''
+    return contacts
+
     return try_this
 
-
+'''
+'''
 def contacts_to_json(contacts):
     result = []
     for number in contacts:
@@ -135,3 +174,5 @@ def contacts_to_json(contacts):
         else:
             c["receivedTexts"] = contacts[number]["receivedTexts"]
         result.append(c)
+
+'''
