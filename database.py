@@ -114,9 +114,11 @@ def contact_query(db, user_id, phoneNumber):
 
 def populate_contacts(db, user_id):
     contacts = {} #empty dict that we will populate
-    q = models.Message.query(models.Message.phoneNumber).filter_by(userId=user_id).group_by(phoneNumber)
+    q = models.Message.query(models.Message.phoneNumber).filter_by(userId=user_id)#.group_by(phoneNumber)
     uniqueNumbers = [m.phoneNumber for m in q]
     print uniqueNumbers
+    #for uniqueNumber in uniqueNumbers:
+        
     return uniqueNumbers
 
 
