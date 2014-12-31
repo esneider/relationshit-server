@@ -64,7 +64,7 @@ def topLists():
 
 
 @app.route('/contactsData', methods = ['GET'])
-def topLists():
+def contactsData():
 
     print '[start] GET contactsData'
     sys.stdout.flush()
