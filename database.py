@@ -80,7 +80,7 @@ def test_query(db):
     try_this = models.Message.query.filter_by(phoneNumber='32507')
     #filter_by(userId="352584060592000")
     print "after first query"
-    print try_this
+    print "hi" + str(try_this.column_descriptions)
 
 # contacts: {phoneNumber: {sentTexts: #, receivedTexts: #, etc.})}
 def populate_contacts(db, user_id):
