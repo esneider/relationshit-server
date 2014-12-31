@@ -85,7 +85,7 @@ def populate_contacts(db, user_id):
     contacts = {}
 
     print "before first query"
-    try_this = db.session.query(models.Message).filter_by(userId=user_id)
+    try_this = db.session.query(models.Message).filter_by(phoneNumber="7626")
     print try_this
     #all_sent_contacts = db.session.query(models.Message.phoneNumber, db.func.count(models.Message.phoneNumber).label("sent_count")).filter_by(userId=user_id).filter_by(direction='send').group_by(phoneNumber).order_by(db.desc("sent_count"))
     print "after first query"
