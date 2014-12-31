@@ -93,7 +93,8 @@ def contact_query(user_id, phoneNumber):
 Both messages were sent by the (same) user'''
 def was_waiting_for_answer(msg1, msg2):
     delay = msg2.timestamp - msg1.timestamp
-    if (msg1.direction != msg2.direction): return False
+    if (msg1.direction != msg2.direction):
+        return False
     acceptable = 60 + len(msg2)/2
     return delay > acceptable
 
