@@ -77,7 +77,7 @@ def top_friends(contacts, sortKey, desc):
 def contact_query(user_id, phoneNumber):
     sentMsgs = []
     rcvdMsgs = []
-    
+
     q = models.Message.query.filter_by(userId = user_id, phoneNumber = phoneNumber)
     numSentTexts = q.filter_by(direction = "send").count()
     numRecTexts = q.filter_by(direction = "receive").count()
@@ -137,7 +137,10 @@ def graph_stats(user_id, phone_number):
     return sent_times, rcvd_times
 
 
-def user_data(contacts):
+def user_data(userId):
+
+    contacts = populate_contacts(userId)
+
     result = []
 
     for phone, data in contacts.iteritems():
