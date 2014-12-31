@@ -110,6 +110,7 @@ def populate_contacts(db, user_id):
 
 def contacts_to_json(contacts):
     result = []
+    print "in contacts_to_json " + contacts
     for number in contacts:
         c = {}
         c["phoneNumber"] = number
