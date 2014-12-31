@@ -105,6 +105,7 @@ def populate_contacts(db, user_id):
     for uniqueNumber in uniqueNumbers:
          numSentTexts, numRecTexts = contact_query(db, user_id, uniqueNumber)
          contacts[uniqueNumber] = {"sentTexts":numSentTexts, "numRecTexts":numRecTexts}
+    return contacts
 
 def contacts_to_json(contacts):
     result = []
@@ -152,22 +153,5 @@ def populate_contacts(db, user_id):
     return contacts
 
     return try_this
-
-'''
-'''
-def contacts_to_json(contacts):
-    result = []
-    for number in contacts:
-        c = {}
-        c["phoneNumber"] = number
-        if (contacts[number]["sentTexts"] == None):
-            c["sentTexts"] = 0
-        else:
-            c["sentTexts"] = contacts[number]["sentTexts"]
-        if (contacts[number]["receivedTexts"] == None):
-            c["receivedTexts"] = 0
-        else:
-            c["receivedTexts"] = contacts[number]["receivedTexts"]
-        result.append(c)
 
 '''
