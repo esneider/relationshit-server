@@ -2,13 +2,14 @@ import os
 import sys
 from flask import Flask, request
 from flask.ext.sqlalchemy import SQLAlchemy
-import database
 
 GLOBAL_USER_ID = "7626"
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 db = SQLAlchemy(app)
+
+import database
 
 @app.route('/')
 def hello():
