@@ -84,8 +84,26 @@ def populate_contacts(db, user_id):
     return contacts
 
 
-def friend_stats(userId, phoneNumber):
-    
+def graph_stats(db, user_id, phone_number):
+    all_texts = db.session.query(models.Message.timestamp).filter_by(userId = user_id).filter_by(phoneNumber = phone_number)
+    sent_times = all_texts.filter_by(direction = 'send').all()
+    rcvd_times = all_texts.filter_by(direction = 'received').all()
+    return sent_times, rcvd_times
+
+
+def user_data(db, user_id):
+    result = {}
+    all_users = db.session.query(models.Message.userId, models.Message.phoneNumber, models.Message.direction, func.count(timestamp)).filter_by(userId = user_id).group_by(userId, phoneNumber, direction).all()
+    for tup in all_users:
+        result[tup[0]] = {}
+
+    for tup in all_users:
+        if (tup[2] = 'send'):
+            result[tup[0]]["sentTexts"] = tup[3]
+        else:
+            result[tup[0]]["receivedTexts"] = tup[3]
+    # add graph stuff
+
 
 '''def past_fifteen_days(db, user_id, phone_number):
     sent_texts = []
