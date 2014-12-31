@@ -9,11 +9,9 @@ db = SQLAlchemy(app)
 
 import database
 
-
 @app.route('/')
 def hello():
     return 'Hello World!'
-
 
 @app.route('/fakemessage', methods = ['POST'])
 def fake_message():
@@ -21,27 +19,19 @@ def fake_message():
     messageList = request.json["messageList"]
     return messageList
 
-
-@app.route('/messageList', methods = ['POST'])
-def messageList():
-
-    print request.headers
-    sys.stdout.flush()
-
-    json = request.get_json(force=True)
-    userId = json["userId"]
-    messageList = json["messageList"]
-
+@app.route('/messages', methods = ['POST'])
+def post():
+    userId = request.json["userId"]
+    # phoneNumber = request.json["phoneNumber"]
+    # contactList = request.json["contactList"]
+    messageList = request.json["messageList"]
+    # upload_contacts(userId, contactList)
     database.upload_messages(userId, messageList)
+    # process(contactList, messageList)
+    # send results back
     return 'SUCCESS'
 
 
-@app.route('/hello')
+@app.route('/test')
 def api_hello():
-    if 'name' in request.args:
-        return 'Hello ' + request.args['name']
-    else:
-        return 'Hello John Doe'
-
-if __name__ == "__main__":
-    app.run()
+    database.process(db, userId)
