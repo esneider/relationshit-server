@@ -43,7 +43,7 @@ def process(userId):
     # top friends graphs
     result.append( ( "Most texts sent to", top_friends(contacts, "sentTexts", True) ) )
     result.append( ( "Most texts received from", top_friends(contacts, "receivedTexts", True) ) )
-    result.append( ( "Longest messages", top_friends(contacts, "messageLength", False) ) )
+    result.append( ( "Longest messages", top_friends(contacts, "messageLength", True) ) )
     result.append( ( "Top friends", compound_friend_score(contacts) ) )
 
     return result
@@ -65,7 +65,8 @@ def top_friends(contacts, sortKey, desc):
     for key, value in contacts.iteritems():
         value_tuples += [ (key, value[sortKey]) ]
     result = sorted(value_tuples, key = lambda x: x[1], reverse = desc)[:NUM_FRIENDS]
-
+    maxval = float(result[0][1])
+    result = [(result[0], int((float(score[1])/maxval)*100)) for res in result]
     return result
 
 

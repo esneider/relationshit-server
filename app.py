@@ -72,6 +72,14 @@ def api_hello():
     print "after executing process"
     sys.stdout.flush()
 
+@app.route('/teststats')
+def test_stats():
+    print "before calling max_unreplied_messages"
+    result = database.max_unreplied_messages(db, "352584060592000", "32507")
+    print result
+    print "after executing max_unreplied_messages"
+    sys.stdout.flush()
+
 
 if __name__ == "__main__":
     app.run(debug=True)
