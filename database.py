@@ -91,7 +91,18 @@ def test_query(db):
     print "after first query"
     #print "hi" + str(try_this.column_descriptions)
     #print try_this.all()[0].messageLength #this works
-    print try_this.count()
+    # print try_this.count() #this also works
+    print try_this.all().messageLength
+
+def ordered_query(db,user_id="352584060592000", orderColumn):
+    #orderColumn is the column you want to sort
+    print "before first query"
+    q = models.Message.query.filter_by(userId=user_id).order_by(orderColumn)
+    print "after first query"
+    #print "hi" + str(try_this.column_descriptions)
+    #print try_this.all()[0].messageLength #this works
+    print try_this.count() #this also works
+    
     
 # contacts: {phoneNumber: {sentTexts: #, receivedTexts: #, etc.})}
 def populate_contacts(db, user_id):
