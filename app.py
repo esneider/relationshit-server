@@ -43,14 +43,16 @@ def messageList():
 
 
 @app.route('/topLists', methods = ['GET'])
-def statList():
+def topLists():
 
     print '[start] GET topLists'
     sys.stdout.flush()
     print request.headers
     sys.stdout.flush()
 
-    lists = [('Top friends', [('asd', 123), ('asd', 123)]), ('Top asd', [('asd', 123), ('asd', 123)])]
+    # lists = [('Top friends', [('asd', 123), ('asd', 123)]), ('Top asd', [('asd', 123), ('asd', 123)])]
+    userId = request.args.get('IMEI')
+    lists = database.process(userId)
 
     data = json.dumps(lists)
     resp = Response(response=data, mimetype="application/json")
@@ -72,4 +74,4 @@ def api_hello():
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)

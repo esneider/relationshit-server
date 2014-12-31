@@ -35,15 +35,15 @@ def upload_contacts(userId, contactList):
     db.session.commit()
 
 
-def process(db, userId):
-    contacts = populate_contacts(db, userId)
+def process(userId):
+    contacts = populate_contacts(userId)
     result = []
 
     # top friends graphs
-    result.append("Most texts sent to", top_friends(contacts, "sentTexts", True))
-    result.append("Most texts received from", top_friends(contacts, "receivedTexts", True))
-    result.append("Longest messages", top_friends(contacts, "messageLength", False))
-    result.append("Top friends", compound_friend_score(contacts))
+    result.append( ( "Most texts sent to", top_friends(contacts, "sentTexts", True) ) )
+    # result.append("Most texts received from", top_friends(contacts, "receivedTexts", True))
+    # result.append("Longest messages", top_friends(contacts, "messageLength", False))
+    # result.append("Top friends", compound_friend_score(contacts))
 
     return result
 
@@ -64,14 +64,14 @@ def compound_friend_score(contacts):
 def top_friends(contacts, sortKey, desc):
     value_tuples = []
     for key, value in contacts.iteritems():
-        value_tuples += [ (key, value[sortKey])]
+        value_tuples += [ (key, value[sortKey]) ]
     result = sorted(value_tuples, key = lambda x: x[1], reverse = desc)[:NUM_FRIENDS]
 
     return result
 
 
 '''Returns properties specific to a single contact'''
-def contact_query(db, user_id, phoneNumber):
+def contact_query(user_id, phoneNumber):
     q = models.Message.query.filter_by(userId = user_id, phoneNumber = phoneNumber)
     numSentTexts = q.filter_by(direction = "send").count()
     numRecTexts = q.filter_by(direction = "receive").count()
@@ -79,24 +79,24 @@ def contact_query(db, user_id, phoneNumber):
     return numSentTexts, numRecTexts, msgLen
 
 
-def populate_contacts(db, user_id):
+def populate_contacts(user_id):
     contacts = {}
     q = db.session.query(models.Message.phoneNumber).filter_by(userId = user_id).distinct()
     uniqueNumbers = [m.phoneNumber for m in q]
     for uniqueNumber in uniqueNumbers:
-         numSentTexts, numRecTexts, msgLen = contact_query(db, user_id, uniqueNumber)
+         numSentTexts, numRecTexts, msgLen = contact_query(user_id, uniqueNumber)
          contacts[uniqueNumber] = {"sentTexts":numSentTexts, "receivedTexts":numRecTexts, "messageLength":msgLen}
     return contacts
 
 
-def graph_stats(db, user_id, phone_number):
+def graph_stats(user_id, phone_number):
     all_texts = db.session.query(models.Message.timestamp).filter_by(userId = user_id).filter_by(phoneNumber = phone_number)
     sent_times = all_texts.filter_by(direction = 'send').all()
     rcvd_times = all_texts.filter_by(direction = 'received').all()
     return sent_times, rcvd_times
 
 
-def user_data(db, user_id):
+def user_data(user_id):
     result = {}
     all_users = db.session.query(models.Message.userId, models.Message.phoneNumber, models.Message.direction, func.count(timestamp), func.avg(messageLength)).filter_by(userId = user_id).group_by(userId, phoneNumber, direction).all()
     for tup in all_users:
@@ -111,7 +111,7 @@ def user_data(db, user_id):
             result[tup[0]]["receivedMsgLen"] = tup[4]
 
 
-'''def past_fifteen_days(db, user_id, phone_number):
+'''def past_fifteen_days(user_id, phone_number):
     sent_texts = []
     rcvd_texts = []
     for i in range(15):
@@ -135,7 +135,7 @@ def user_data(db, user_id):
 '''
 
 '''
-def order_by_number_messages(db,user_id, direction):
+def order_by_number_messages(user_id, direction):
     q = models.Message.query.filter_by(userId=user_id,direction=direction)
 
     results_list=q.all()
