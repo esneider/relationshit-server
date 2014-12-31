@@ -40,15 +40,15 @@ def messageList():
     return 'OK'
 
 
-@app.route('/topLists', method = ['GET'])
+@app.route('/topLists', methods = ['GET'])
 def statList():
 
-    print '[start] POST topLists'
+    print '[start] GET topLists'
     sys.stdout.flush()
 
     lists = [('Top friends', [('asd', 123), ('asd', 123)]), ('Top asd', [('asd', 123), ('asd', 123)])]
 
-    print '[start] POST topLists'
+    print '[end] GET topLists'
     sys.stdout.flush()
 
     return lists
