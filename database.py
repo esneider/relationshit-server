@@ -1,31 +1,37 @@
+import sys
 import models
-from sqlalchemy import *
+from app import db
 import json
 import time
 from datetime import datetime
+from sqlalchemy import *
 
-NUM_TOP_FRIENDS = 10
 
 def upload_messages(userId, messageList):
+
     for message in messageList:
-        direction = message["direction"]
-        phoneNumber = message["phoneNumber"]
-        timestamp = message["timestamp"]
+        direction     = message["direction"]
+        phoneNumber   = message["phoneNumber"]
+        timestamp     = message["timestamp"]
         messageLength = message["messageLength"]
 
         message_obj = models.Message(userId, direction, phoneNumber, timestamp, messageLength)
-        db.session.add(message_obj) #add message to database
+        db.session.add(message_obj)
+
     db.session.commit()
 
-def upload_contacts(db, userId, contactList):
+
+def upload_contacts(userId, contactList):
+
     for contact in contactList:
-        userId = userId
         phoneNumber = contact["phoneNumber"]
         contactType = contact["contactType"]
 
-        contact_obj = models.Contacts(userID, phoneNumber, contactType)
+        contact_obj = models.Contacts(userId, phoneNumber, contactType)
         db.session.add(contact_obj)
+
     db.session.commit()
+
 
 def process(db, userId):
     print "before populate contacts"
@@ -33,15 +39,16 @@ def process(db, userId):
     print "after populate_contacts"
 
     contacts = json.dumps(contacts)
-    return contacts  
+    return contacts
+
 
 def populate_graphs(db, userId, graphs):
-    '''friend_score = 
+    '''friend_score =
     top_ten_recipients = db.session.query(db.func.distinct(models.Message.phoneNumber).filter(models.Message.direction == 'send'),
                          db.func.count(models.Message.phoneNumber)).filter(models.Message.direction == 'send').label("count")).group_by(models.Message.phoneNumber).order_by(count).limit(10)
     top_ten_senders = db.session.query(db.func.distinct(models.Message.phoneNumber).filter(models.Message.direction == 'receive'),
                          db.func.count(models.Message.phoneNumber)).filter(models.Message.direction == 'receive').label("count")).group_by(models.Message.phoneNumber).order_by(count).limit(10)
-    
+
     graph1 = {}
     graph1['name'] = "Top Recipients"
     graph1['data'] = top_ten_recipients
@@ -52,6 +59,7 @@ def populate_graphs(db, userId, graphs):
     graph1['data'] = top_ten_senders
     graphs.append(graph2)'''
     pass
+
 
 def past_fifteen_days(db, user_id, phone_number):
     sent_texts = []
@@ -74,11 +82,13 @@ def past_fifteen_days(db, user_id, phone_number):
 
     for stamp in all_rcvd_messages:
         rcvd_texts[((int(stamp) - current_time))/seconds_per_day] += 1
-        
+
+
 def test_query(db):
     print "before first query"
     try_this = db.session.query(models.Message).filter_by(phoneNumber="7626")
     print try_this
+
 
 # contacts: {phoneNumber: {sentTexts: #, receivedTexts: #, etc.})}
 def populate_contacts(db, user_id):
@@ -107,6 +117,7 @@ def populate_contacts(db, user_id):
 
     return contacts    '''
     return try_this
+
 
 def contacts_to_json(contacts):
     result = []
