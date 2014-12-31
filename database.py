@@ -28,6 +28,7 @@ def upload_contacts(db, userId, contactList):
     db.session.commit()
 
 def process(db, userId):
+    print "before populate contacts"
     contacts = populate_contacts(db, userId)
     print "after populate_contacts"
 

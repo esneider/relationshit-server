@@ -34,4 +34,6 @@ def post():
 
 @app.route('/test')
 def api_hello():
+    print "before calling process"
     database.process(db, userId)
+    print "after executing process"
