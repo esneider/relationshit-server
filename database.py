@@ -92,8 +92,10 @@ def test_query(db):
     #print "hi" + str(try_this.column_descriptions)
     #print try_this.all()[0].messageLength #this works
     # print try_this.count() #this also works
-    print try_this.all().messageLength
-
+    #print try_this.all().messageLength
+    results_list=try_this.all()
+    print [m for m in results_list.messageLength]
+    
 def ordered_query(db,user_id="352584060592000", orderColumn):
     #orderColumn is the column you want to sort
     print "before first query"
