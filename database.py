@@ -77,7 +77,8 @@ def past_fifteen_days(db, user_id, phone_number):
         
 def test_query(db):
     print "before first query"
-    try_this = db.session.query(models.Message).filter_by(phoneNumber="7626")
+    try_this = db.session.query(models.Message).filter_by(userId="352584060592000")
+    print "after first query"
     print try_this
 
 # contacts: {phoneNumber: {sentTexts: #, receivedTexts: #, etc.})}
