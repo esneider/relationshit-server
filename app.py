@@ -33,7 +33,7 @@ def messageList():
     messageList = json["messageList"]
 
     database.upload_messages(userId, messageList)
-    return 'SUCCESS'
+    return process(db, userId)
 
 
 @app.route('/test')
@@ -41,7 +41,7 @@ def api_hello():
     print "before calling process"
     #database.test_query(db)
     #database.contact_query(db, "352584060592000", "32507")
-    database.populate_contacts(db, "352584060592000")
+    database.process(db, "352584060592000")
     print "after executing process"
     sys.stdout.flush()
 

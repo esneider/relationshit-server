@@ -33,7 +33,7 @@ def upload_contacts(userId, contactList):
 
 
 def process(db, userId):
-    contacts = populate_contacts(db, userId)
+    contacts = contacts_to_json(populate_contacts(db, userId))
 
     contacts = json.dumps(contacts)
     return contacts
@@ -58,7 +58,6 @@ def populate_graphs(db, userId, graphs):
     pass
 '''
 
-
 def past_fifteen_days(db, user_id, phone_number):
     sent_texts = []
     rcvd_texts = []
@@ -80,19 +79,6 @@ def past_fifteen_days(db, user_id, phone_number):
 
     for stamp in all_rcvd_messages:
         rcvd_texts[((int(stamp) - current_time))/seconds_per_day] += 1
-
-
-def test_query(db):
-    print "before first query"
-    #try_this = models.Message.query.filter_by(phoneNumber='32507')
-    try_this = models.Message.query.filter_by(userId="352584060592000")
-    print "after first query"
-    #print "hi" + str(try_this.column_descriptions)
-    
-    #print try_this.all()[0].messageLength #this works
-    # print try_this.count() #this also works
-    results_list=try_this.all()
-    print [r.messageLength for r in results_list] #this works
 
 '''
 def order_by_number_messages(db,user_id, direction):
@@ -116,10 +102,25 @@ def populate_contacts(db, user_id):
     contacts = {}
     q = db.session.query(models.Message.phoneNumber).filter_by(userId = user_id).distinct()
     uniqueNumbers = [m.phoneNumber for m in q]
-    print uniqueNumbers
     for uniqueNumber in uniqueNumbers:
-         numSentTexts, numRecTexts =  contact_query(db, user_id, uniqueNumber)
-         contacts[uniqueNumber]={"sentTexts":numSentTexts, "numRecTexts":numRecTexts}
+         numSentTexts, numRecTexts = contact_query(db, user_id, uniqueNumber)
+         contacts[uniqueNumber] = {"sentTexts":numSentTexts, "numRecTexts":numRecTexts}
+
+def contacts_to_json(contacts):
+    result = []
+    for number in contacts:
+        c = {}
+        c["phoneNumber"] = number
+        if (contacts[number]["sentTexts"] == None):
+            c["sentTexts"] = 0
+        else:
+            c["sentTexts"] = contacts[number]["sentTexts"]
+        if (contacts[number]["receivedTexts"] == None):
+            c["receivedTexts"] = 0
+        else:
+            c["receivedTexts"] = contacts[number]["receivedTexts"]
+        result.append(c)
+    print result
 
 '''
 # contacts: {phoneNumber: {sentTexts: #, receivedTexts: #, etc.})}
