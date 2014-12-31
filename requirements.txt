@@ -7,3 +7,6 @@ MarkupSafe==0.23
 psycopg2==2.5.4
 SQLAlchemy==0.9.8
 Werkzeug==0.9.6
+numpy==1.7.0
+distribute==0.7.3
+matplotlib==1.1.0
