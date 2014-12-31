@@ -36,14 +36,24 @@ def upload_contacts(userId, contactList):
 
 
 def process(userId):
+
+    print 'heyy'
+    sys.stdout.flush()
+
     contacts = populate_contacts(userId)
     result = []
+
+    print 'heyy'
+    sys.stdout.flush()
 
     # top friends graphs
     result.append( ( "Most texts sent to", top_friends(contacts, "sentTexts", True) ) )
     # result.append("Most texts received from", top_friends(contacts, "receivedTexts", True))
     # result.append("Longest messages", top_friends(contacts, "messageLength", False))
     # result.append("Top friends", compound_friend_score(contacts))
+
+    print 'heyy'
+    sys.stdout.flush()
 
     return result
 
@@ -72,20 +82,65 @@ def top_friends(contacts, sortKey, desc):
 
 '''Returns properties specific to a single contact'''
 def contact_query(user_id, phoneNumber):
+
+    print 'bla 1'
+    sys.stdout.flush()
+
     q = models.Message.query.filter_by(userId = user_id, phoneNumber = phoneNumber)
+
+    print 'bla 2'
+    sys.stdout.flush()
+
     numSentTexts = q.filter_by(direction = "send").count()
+
+    print 'bla 3'
+    sys.stdout.flush()
+
     numRecTexts = q.filter_by(direction = "receive").count()
-    msgLen = q.query(func.avg(models.Message.messageLength))
+
+    print 'bla 4'
+    sys.stdout.flush()
+
+    messages = q.query(models.Message.messageLength).all()
+
+    print 'bla 5'
+    sys.stdout.flush()
+    msgLen = sum(msgs) / len(msgs)
+
+    print 'bla 5'
+    sys.stdout.flush()
+
     return numSentTexts, numRecTexts, msgLen
 
 
 def populate_contacts(user_id):
     contacts = {}
+
+    print 'heyy 1'
+    sys.stdout.flush()
+
     q = db.session.query(models.Message.phoneNumber).filter_by(userId = user_id).distinct()
+
+    print 'heyy 2'
+    sys.stdout.flush()
+
     uniqueNumbers = [m.phoneNumber for m in q]
+
+    print 'heyy 3', len(uniqueNumbers)
+    sys.stdout.flush()
+
     for uniqueNumber in uniqueNumbers:
-         numSentTexts, numRecTexts, msgLen = contact_query(user_id, uniqueNumber)
-         contacts[uniqueNumber] = {"sentTexts":numSentTexts, "receivedTexts":numRecTexts, "messageLength":msgLen}
+
+        print 'i', uniqueNumber
+        sys.stdout.flush()
+
+        numSentTexts, numRecTexts, msgLen = contact_query(user_id, uniqueNumber)
+
+        contacts[uniqueNumber] = {"sentTexts":numSentTexts, "receivedTexts":numRecTexts, "messageLength":msgLen}
+
+    print 'heyy'
+    sys.stdout.flush()
+
     return contacts
 
 
