@@ -1,6 +1,7 @@
 import os
 import sys
-from flask import Flask, request
+import json
+from flask import Flask, request, Response
 from flask.ext.sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -26,6 +27,7 @@ def fake_message():
 def messageList():
 
     print '[start] POST messageList'
+    sys.stdout.flush()
     print request.headers
     sys.stdout.flush()
 
@@ -45,13 +47,18 @@ def statList():
 
     print '[start] GET topLists'
     sys.stdout.flush()
+    print request.headers
+    sys.stdout.flush()
 
     lists = [('Top friends', [('asd', 123), ('asd', 123)]), ('Top asd', [('asd', 123), ('asd', 123)])]
+
+    data = json.dumps(lists)
+    resp = Response(response=data, mimetype="application/json")
 
     print '[end] GET topLists'
     sys.stdout.flush()
 
-    return lists
+    return resp
 
 
 @app.route('/test')
