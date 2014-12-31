@@ -59,8 +59,8 @@ def compound_friend_score(contacts):
         scores[key] = sum(contacts[key].values())
 
     sorted_scores = sorted(scores.items(), key = operator.itemgetter(1), reverse = True)
-    max = float(sorted_scores[0][1])
-    normalized_scores = [(score[0], int((float(score[1])/max)*100)) for score in sorted_scores]
+    maxval = float(sorted_scores[0][1])
+    normalized_scores = [(score[0], int((float(score[1])/maxval)*100)) for score in sorted_scores]
     return normalized_scores;
 
 
@@ -84,9 +84,14 @@ def contact_query(user_id, phoneNumber):
 
     for x in q.all():
         if (x.direction == 'send'):
-            sentMsgs.append(x)
+            sentMsgs.append(x.messageLength)
         else:
-            rcvdMsgs.append(x)
+            rcvdMsgs.append(x.messageLength)
+
+    if len(sentMsgs) == 0:
+        sentMsgs.append(0)
+    if len(rcvdMsgs) == 0:
+        rcvdMsgs.append(0)
 
     sentMsgLen = sum(sentMsgs) / len(sentMsgs)
     rcvdMsgLen = sum(rcvdMsgs) / len(rcvdMsgs)
