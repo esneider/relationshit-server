@@ -93,15 +93,17 @@ def graph_stats(db, user_id, phone_number):
 
 def user_data(db, user_id):
     result = {}
-    all_users = db.session.query(models.Message.userId, models.Message.phoneNumber, models.Message.direction, func.count(timestamp)).filter_by(userId = user_id).group_by(userId, phoneNumber, direction).all()
+    all_users = db.session.query(models.Message.userId, models.Message.phoneNumber, models.Message.direction, func.count(timestamp), func.avg(messageLength)).filter_by(userId = user_id).group_by(userId, phoneNumber, direction).all()
     for tup in all_users:
         result[tup[0]] = {}
 
     for tup in all_users:
         if (tup[2] = 'send'):
             result[tup[0]]["sentTexts"] = tup[3]
+            result[tup[0]]["sentMsgLen"] = tup[4]
         else:
             result[tup[0]]["receivedTexts"] = tup[3]
+            result[tup[0]]["receivedMsgLen"] = tup[4]
     # add graph stuff
 
 
