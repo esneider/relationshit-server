@@ -2,6 +2,7 @@ import sys
 import models
 from app import db
 import json
+import operator
 import time
 from datetime import datetime
 from sqlalchemy import *
@@ -55,7 +56,7 @@ def compound_friend_score(contacts):
     sorted_scores = sorted(x.items(), key = operator.itemgetter(1), reverse = True)    
     max = sorted_scores[0][1]
     normalized_scores = [(score[0], int((score[1]/max)*100)) for score in sorted_scores]
-    
+
 
 def top_friends(contacts, sortKey, desc):
     value_tuples = []
