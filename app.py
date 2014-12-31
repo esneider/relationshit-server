@@ -25,15 +25,33 @@ def fake_message():
 @app.route('/messageList', methods = ['POST'])
 def messageList():
 
+    print '[start] POST messageList'
     print request.headers
     sys.stdout.flush()
 
     json = request.get_json(force=True)
     userId = json["userId"]
     messageList = json["messageList"]
-
     database.upload_messages(userId, messageList)
-    return process(db, userId)
+
+    print '[end] POST messageList'
+    sys.stdout.flush()
+
+    return 'OK'
+
+
+@app.route('/topLists', methods = ['GET'])
+def statList():
+
+    print '[start] GET topLists'
+    sys.stdout.flush()
+
+    lists = [('Top friends', [('asd', 123), ('asd', 123)]), ('Top asd', [('asd', 123), ('asd', 123)])]
+
+    print '[end] GET topLists'
+    sys.stdout.flush()
+
+    return lists
 
 
 @app.route('/test')
