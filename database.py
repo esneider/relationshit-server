@@ -113,10 +113,11 @@ def contact_query(db, user_id, phoneNumber):
     return numSentTexts, numRecTexts
 
 def populate_contacts(db, user_id):
+    print "in populate_contacts"
     contacts = {} #empty dict that we will populate
-    q = models.Message.query(models.Message.phoneNumber)#.filter_by(userId=user_id).distinct()
-                                                        #uniqueNumbers = [m.phoneNumber for m in q]
-                                                        #print uniqueNumbers
+    q = models.Message.query(models.Message.phoneNumber) #.filter_by(userId=user_id).distinct()
+    #uniqueNumbers = [m.phoneNumber for m in q]
+    #print uniqueNumbers
     #for uniqueNumber in uniqueNumbers:
         
     #return uniqueNumbers
