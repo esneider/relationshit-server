@@ -101,7 +101,7 @@ def contact_query(user_id, phoneNumber):
     print 'bla 4'
     sys.stdout.flush()
 
-    messages = q.query(models.Message.messageLength).all()
+    msgs = q.query(models.Message.messageLength).all()
 
     print 'bla 5'
     sys.stdout.flush()
