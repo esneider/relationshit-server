@@ -6,6 +6,8 @@ import time
 from datetime import datetime
 from sqlalchemy import *
 
+NUM_FRIENDS = 20
+
 def upload_messages(userId, messageList):
 
     for message in messageList:
@@ -34,43 +36,58 @@ def upload_contacts(userId, contactList):
 
 def process(db, userId):
     contacts = populate_contacts(db, userId)
-    print contacts
+    result = []
 
     # top friends graphs
-    top_friends(contacts, "sentTexts")
+    result.append("Most texts sent to", top_friends(contacts, "sentTexts", True))
+    result.append("Most texts received from", top_friends(contacts, "receivedTexts", True))
+    result.append("Longest messages", top_friends(contacts, "messageLength", False))
+    result.append("Top friends", compound_friend_score(contacts))
 
-    #contacts = json.dumps(contacts)
-    #print contacts
-    return contacts
+    return result
 
-'''
-def populate_graphs(db, userId, graphs):
-    top_ten_recipients = db.session.query(db.func.distinct(models.Message.phoneNumber).filter(models.Message.direction == 'send'),
-                         db.func.count(models.Message.phoneNumber)).filter(models.Message.direction == 'send').label("count")).group_by(models.Message.phoneNumber).order_by(count).limit(10)
-    top_ten_senders = db.session.query(db.func.distinct(models.Message.phoneNumber).filter(models.Message.direction == 'receive'),
-                         db.func.count(models.Message.phoneNumber)).filter(models.Message.direction == 'receive').label("count")).group_by(models.Message.phoneNumber).order_by(count).limit(10)
 
-    graph1 = {}
-    graph1['name'] = "Top Recipients"
-    graph1['data'] = top_ten_recipients
-    graphs.append(graph1)
+def compound_friend_score(contacts):
+    scores = {}
+    for key, value in contacts.iteritems():
+        scores[key] = sum(scores[key].values())
 
-    graph2 = {}
-    graph1['name'] = "Top Senders"
-    graph1['data'] = top_ten_senders
-    graphs.append(graph2)
-    pass
-'''
+    sorted_scores = sorted(x.items(), key = operator.itemgetter(1), reverse = True)    
+    max = sorted_scores[0][1]
+    normalized_scores = [(score[0], int((score[1]/max)*100)) for score in sorted_scores]
 
-def top_friends(contacts, sortKey):
+def top_friends(contacts, sortKey, desc):
     value_tuples = []
     for key, value in contacts.iteritems():
         value_tuples += [ (key, value[sortKey])]
-    result = sorted(value_tuples, key = lambda x: x[1], reverse=True)
-    print result
+    result = sorted(value_tuples, key = lambda x: x[1], reverse = desc)[:NUM_FRIENDS]
+
     return result
 
-def past_fifteen_days(db, user_id, phone_number):
+
+'''Returns properties specific to a single contact'''
+def contact_query(db, user_id, phoneNumber):
+    q = models.Message.query.filter_by(userId = user_id, phoneNumber = phoneNumber)
+    numSentTexts = q.filter_by(direction = "send").count()
+    numRecTexts = q.filter_by(direction = "receive").count()
+    msgLen = q.query(func.avg(models.Message.messageLength))
+    return numSentTexts, numRecTexts, msgLen
+
+
+def populate_contacts(db, user_id):
+    contacts = {}
+    q = db.session.query(models.Message.phoneNumber).filter_by(userId = user_id).distinct()
+    uniqueNumbers = [m.phoneNumber for m in q]
+    for uniqueNumber in uniqueNumbers:
+         numSentTexts, numRecTexts, msgLen = contact_query(db, user_id, uniqueNumber)
+         contacts[uniqueNumber] = {"sentTexts":numSentTexts, "receivedTexts":numRecTexts, "messageLength":msgLen}
+    return contacts
+
+
+def friend_stats(userId, phoneNumber):
+    
+
+'''def past_fifteen_days(db, user_id, phone_number):
     sent_texts = []
     rcvd_texts = []
     for i in range(15):
@@ -91,6 +108,7 @@ def past_fifteen_days(db, user_id, phone_number):
 
     for stamp in all_rcvd_messages:
         rcvd_texts[((int(stamp) - current_time))/seconds_per_day] += 1
+'''
 
 '''
 def order_by_number_messages(db,user_id, direction):
@@ -101,70 +119,4 @@ def order_by_number_messages(db,user_id, direction):
     ordered_values = [r.orderColumn for r in results_list]
     
     #return [ordered_numbers, ordered_values]
-'''
-
-'''Returns properties specific to a single contact'''
-def contact_query(db, user_id, phoneNumber):
-    q = models.Message.query.filter_by(userId = user_id, phoneNumber = phoneNumber)
-    numSentTexts = q.filter_by(direction = "send").count()
-    numRecTexts = q.filter_by(direction = "receive").count()
-    return numSentTexts, numRecTexts
-
-def populate_contacts(db, user_id):
-    contacts = {}
-    q = db.session.query(models.Message.phoneNumber).filter_by(userId = user_id).distinct()
-    uniqueNumbers = [m.phoneNumber for m in q]
-    for uniqueNumber in uniqueNumbers:
-         numSentTexts, numRecTexts = contact_query(db, user_id, uniqueNumber)
-         contacts[uniqueNumber] = {"sentTexts":numSentTexts, "receivedTexts":numRecTexts}
-    return contacts
-
-def contacts_to_json(contacts):
-    result = []
-    print "in contacts_to_json " + contacts
-    for number in contacts:
-        c = {}
-        c["phoneNumber"] = number
-        if (contacts[number]["sentTexts"] == None):
-            c["sentTexts"] = 0
-        else:
-            c["sentTexts"] = contacts[number]["sentTexts"]
-        if (contacts[number]["receivedTexts"] == None):
-            c["receivedTexts"] = 0
-        else:
-            c["receivedTexts"] = contacts[number]["receivedTexts"]
-        result.append(c)
-    return result
-
-'''
-# contacts: {phoneNumber: {sentTexts: #, receivedTexts: #, etc.})}
-def populate_contacts(db, user_id):
-    contacts = {}
-
-    print "before first query"
-    try_this = db.session.query(models.Message).filter_by(userId=user_id)
-    print "hi" + str(try_this)
-    #all_sent_contacts = db.session.query(models.Message.phoneNumber, db.func.count(models.Message.phoneNumber).label("sent_count")).filter_by(userId=user_id).filter_by(direction='send').group_by(phoneNumber).order_by(db.desc("sent_count"))
-    print "after first query"
-    
-    all_sent_contacts = all_sent_contacts.column_descriptions
-    print all_sent_contacts
-
-    for entry in all_sent_contacts:
-        contacts[entry.phoneNumber] = {}
-        contacts[entry.phoneNumber]["sentTexts"] = entry.sent_count
-
-    all_rcvd_contacts = db.session.query(models.Message.phoneNumber, db.func.count(models.Message.phoneNumber).label("rcvd_count")).filter_by(userId=user_id).filter_by(direction='receive').group_by(phoneNumber).order_by(db.desc("rcvd_count"))
-    all_rcvd_contacts = all_rcvd_contacts.column_descriptions
-    print all_rcvd_contacts
-
-    for entry in all_rcvd_contacts:
-        if (contacts[entry.phoneNumber] == None):
-            contacts[entry.phoneNumber] = {}
-        contacts[phoneNumber]["receivedTexts"] = entry.rcvd_count
-
-    return contacts
-
-    return try_this
-
 '''
