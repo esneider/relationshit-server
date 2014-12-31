@@ -11,6 +11,9 @@ NUM_FRIENDS = 20
 
 def upload_messages(userId, messageList):
 
+    models.Message.query.filter_by(userId = userId).delete()
+    db.session.commit()
+
     for message in messageList:
         direction     = message["direction"]
         phoneNumber   = message["phoneNumber"]
