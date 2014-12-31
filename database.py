@@ -115,12 +115,15 @@ def contact_query(db, user_id, phoneNumber):
 def populate_contacts(db, user_id):
     print "in populate_contacts"
     contacts = {} #empty dict that we will populate
-    q = models.Message.query(models.Message.phoneNumber) #.filter_by(userId=user_id).distinct()
-    #uniqueNumbers = [m.phoneNumber for m in q]
-    #print uniqueNumbers
-    #for uniqueNumber in uniqueNumbers:
+    q = models.Message.query.filter_by(userId=user_id, phoneNumber=phoneNumber)
+    print "dummy"
+    q = models.Message.query(models.Message.phoneNumber)#.filter_by(userId=user_id).distinct() #this line is not working
+    uniqueNumbers = [m.phoneNumber for m in q]
+    print uniqueNumbers
+    for uniqueNumber in uniqueNumbers:
+         numSentTexts, numRecTexts =  contact_query(db, user_id, uniqueNumber)
+         contacts[uniqueNumber]={"sentTexts":numSentTexts, "numRecTexts":numRecTexts}
         
-    #return uniqueNumbers
 
 
 '''
