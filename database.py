@@ -55,7 +55,7 @@ def compound_friend_score(contacts):
         print key, value
         scores[key] = sum(contacts[key].values())
 
-    sorted_scores = sorted(scores.items(), key = operator.itemgetter(1), reverse = True) 
+    sorted_scores = sorted(scores.items(), key = operator.itemgetter(1), reverse = True)
     max = float(sorted_scores[0][1])
     normalized_scores = [(score[0], int((float(score[1])/max)*100)) for score in sorted_scores]
     return normalized_scores;
@@ -137,10 +137,10 @@ def user_data(db, user_id):
 '''
 def order_by_number_messages(db,user_id, direction):
     q = models.Message.query.filter_by(userId=user_id,direction=direction)
-    
+
     results_list=q.all()
-    ordered_numbers = [r.phoneNumber for r in results_list] 
+    ordered_numbers = [r.phoneNumber for r in results_list]
     ordered_values = [r.orderColumn for r in results_list]
-    
+
     #return [ordered_numbers, ordered_values]
 '''
